@@ -3,11 +3,13 @@
     <PropertyGroup>
         <Version>0.0.1</Version>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationManifest>app.manifest</ApplicationManifest>
+        <LangVersion>latest</LangVersion>
+        <NoWarn>NU5119</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
