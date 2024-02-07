@@ -10,9 +10,6 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <LangVersion>latest</LangVersion>
         <NoWarn>NU5119</NoWarn>
-    </PropertyGroup>
-
-    <PropertyGroup>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Description>.NET Windows GAC tool</Description>
         <Copyright>Tony Redondo @ 2024</Copyright>
