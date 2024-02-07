@@ -20,3 +20,17 @@ dotnet gac install <assembly path>
 ```shell
 dotnet gac uninstall <assembly name>
 ```
+
+## Troubleshooting
+
+If a message like this appears when running `dotnet gac`
+
+```shell
+System.ComponentModel.Win32Exception (740): An error occurred trying to start process 'C:\Users\Usuario\.dotnet\tools\dotnet-gac.exe' with working directory 'C:\temp\GacTool\artifacts'. The requested operation requires elevation.
+   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)
+   at Microsoft.DotNet.Cli.Utils.Command.Execute(Action`1 processStarted)
+   at Microsoft.DotNet.Cli.Program.ProcessArgs(String[] args, TimeSpan startupTime, ITelemetry telemetryClient)
+   at Microsoft.DotNet.Cli.Program.Main(String[] args)
+```
+
+Open a new console with Administrator permissions.
