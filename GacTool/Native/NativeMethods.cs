@@ -8,7 +8,9 @@ namespace GacTool.Native;
 [ComVisible(false)]
 internal sealed class NativeMethods
 {
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
+#endif
     internal static unsafe AssemblyCacheContainer CreateAssemblyCache()
     {
         const string subKey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";

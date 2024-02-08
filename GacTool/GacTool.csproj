@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>0.0.2</Version>
+        <Version>0.0.3</Version>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net7.0;net6.0;net5.0;netcoreapp3.1;netcoreapp3.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
         <LangVersion>latest</LangVersion>
         <NoWarn>NU5119</NoWarn>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -41,5 +40,9 @@
       <Content Include="..\.gitignore">
         <Link>.gitignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     </ItemGroup>
 </Project>
