@@ -41,3 +41,17 @@ jobs:
 
     - name: Install the tool
       run: dotnet tool update -g gactool --add-source ./artifacts
+
+## Let's try
+
+    - name: Test installing to the GAC
+      run: |
+        dotnet tool update -g dd-trace
+
+        set TOOLFOLDER=%USERPROFILE%\.dotnet\tools\.store\dd-trace
+        dir %USERPROFILE%\.dotnet\tools\.store\dd-trace /b > toolversion.txt
+        set /p TOOLVERSION=<toolversion.txt
+        del toolversion.txt
+        SET TOOLHOME=%TOOLFOLDER%\%TOOLVERSION%\dd-trace\%TOOLVERSION%\home\net461
+
+        dotnet gac install "%TOOLHOME%\Datadog.Trace.dll"
