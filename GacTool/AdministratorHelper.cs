@@ -4,7 +4,9 @@ using System.Security.Principal;
 
 namespace GacTool;
 
+#if NET5_0_OR_GREATER
 [SupportedOSPlatform("windows")]
+#endif
 internal static class AdministratorHelper
 {
     private static bool? _isElevated;
@@ -23,8 +25,15 @@ internal static class AdministratorHelper
 
     public static void EnsureIsElevated()
     {
-        if (!IsElevated && Environment.ProcessPath is { } processPath)
+        if (!IsElevated)
         {
+            var commandLineArguments = Environment.GetCommandLineArgs();
+#if NET6_0_OR_GREATER
+            var processPath = Environment.ProcessPath ??commandLineArguments[0];
+#else
+            var processPath = commandLineArguments[0];
+#endif
+
             var processInfo = new ProcessStartInfo(processPath)
             {
                 Verb = "runas",
@@ -32,7 +41,7 @@ internal static class AdministratorHelper
                 CreateNoWindow = true
             };
 
-            foreach (var arg in Environment.GetCommandLineArgs().Skip(1))
+            foreach (var arg in commandLineArguments.Skip(1))
             {
                 processInfo.ArgumentList.Add(arg);
             }
