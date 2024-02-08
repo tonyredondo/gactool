@@ -65,8 +65,9 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 // .
             }
         }
+
         using var container = NativeMethods.CreateAssemblyCache();
-        var hr = container.AssemblyCache.UninstallAssembly(0, assemblyName, IntPtr.Zero, out var position);
+        var hr = container.AssemblyCache.UninstallAssembly(0, assemblyName!, IntPtr.Zero, out var position);
         if (position == 3 /*IASSEMBLYCACHE_UNINSTALL_DISPOSITION_ALREADY_UNINSTALLED*/)
         {
             Console.WriteLine("Assembly '{0}' was already uninstalled from the GAC.", assemblyName);
