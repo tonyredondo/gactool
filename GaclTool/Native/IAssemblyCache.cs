@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace GacUtilTool.Native;
+namespace GacTool.Native;
 
 [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("e707dcde-d1cd-11d2-bab9-00c04f8eceae")]
 internal interface IAssemblyCache

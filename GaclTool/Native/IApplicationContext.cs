@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace GacUtilTool.Native;
+namespace GacTool.Native;
 
 [ComImport,InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("7c23ff90-33af-11d3-95da-00a024a85b51")]
 internal interface IApplicationContext
