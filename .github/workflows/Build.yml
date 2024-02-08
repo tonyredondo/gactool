@@ -45,6 +45,7 @@ jobs:
 ## Let's try
 
     - name: Test installing to the GAC
+      shell: cmd
       run: |
         dotnet tool update -g dd-trace
 
