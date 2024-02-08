@@ -1,0 +1,58 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          6.0.x
+          7.0.x
+          8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Pack
+      run: dotnet pack
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        path: .\artifacts
+
+    - name: Install the tool
+      run: dotnet tool update -g gactool --add-source ./artifacts
+
+## Let's try
+
+    - name: Test installing to the GAC
+      shell: cmd
+      run: |
+        dotnet tool update -g dd-trace
+
+        set TOOLFOLDER=%USERPROFILE%\.dotnet\tools\.store\dd-trace
+        dir %USERPROFILE%\.dotnet\tools\.store\dd-trace /b > toolversion.txt
+        set /p TOOLVERSION=<toolversion.txt
+        del toolversion.txt
+        SET TOOLHOME=%TOOLFOLDER%\%TOOLVERSION%\dd-trace\%TOOLVERSION%\home\net461
+
+        dotnet gac install "%TOOLHOME%\Datadog.Trace.dll"
