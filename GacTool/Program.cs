@@ -1,5 +1,7 @@
 ﻿
+using System.Reflection;
 using System.Runtime.InteropServices;
+using GacTool;
 using GacTool.Native;
 
 Environment.ExitCode = 1;
@@ -22,6 +24,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 
     if (command == "install")
     {
+        AdministratorHelper.EnsureIsElevated();
         var assemblyPath = Path.Combine(Environment.CurrentDirectory, args[1]);
         if (!File.Exists(assemblyPath))
         {
@@ -46,12 +49,28 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 
     if (command == "uninstall")
     {
+        AdministratorHelper.EnsureIsElevated();
         var assemblyName = args[1];
+        if (File.Exists(assemblyName))
+        {
+            try
+            {
+                var asmPath = Path.IsPathRooted(assemblyName)
+                    ? assemblyName
+                    : Path.Combine(Environment.CurrentDirectory, assemblyName);
+                assemblyName = Assembly.LoadFile(asmPath).GetName().Name;
+            }
+            catch
+            {
+                // .
+            }
+        }
         using var container = NativeMethods.CreateAssemblyCache();
         var hr = container.AssemblyCache.UninstallAssembly(0, assemblyName, IntPtr.Zero, out var position);
         if (position == 3 /*IASSEMBLYCACHE_UNINSTALL_DISPOSITION_ALREADY_UNINSTALLED*/)
         {
             Console.WriteLine("Assembly '{0}' was already uninstalled from the GAC.", assemblyName);
+            Environment.ExitCode = hr;
             return;
         }
         
