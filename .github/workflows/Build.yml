@@ -38,3 +38,6 @@ jobs:
       uses: actions/upload-artifact@v4.3.1
       with:
         path: .\artifacts
+
+    - name: Install the tool
+      run: dotnet tool update -g gactool --add-source ./artifacts
