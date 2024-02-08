@@ -19,6 +19,11 @@ internal sealed class NativeMethods
             fusionFullPath = Path.Combine(installPath, "fusion.dll");
         }
 
+        if (!File.Exists(fusionFullPath))
+        {
+            throw new FileNotFoundException($"{fusionFullPath} cannot be found.");
+        }
+
         var libPointer = NativeLibrary.Load(fusionFullPath);
         var createAssemblyCachePointer = NativeLibrary.GetExport(libPointer, nameof(CreateAssemblyCache));
         var functionPointer = (delegate* unmanaged[Stdcall] <out IAssemblyCache, uint, int>)createAssemblyCachePointer;
