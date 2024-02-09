@@ -6,7 +6,6 @@ namespace GacTool.Native;
 
 internal sealed class NativeLibrary
 {
-
     [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
     private static extern IntPtr LoadLibrary(string libName);
 
