@@ -56,3 +56,6 @@ jobs:
         SET TOOLHOME=%TOOLFOLDER%\%TOOLVERSION%\dd-trace\%TOOLVERSION%\home\net461
 
         dotnet gac install "%TOOLHOME%\Datadog.Trace.dll"
+        dotnet gac get "Datadog.Trace"
+        dotnet gac uninstall "Datadog.Trace"
+        

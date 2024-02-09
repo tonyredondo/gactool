@@ -10,15 +10,12 @@ namespace GacTool;
 internal static class AdministratorHelper
 {
     private static bool? _isElevated;
-    
+
     public static bool IsElevated
     {
         get
         {
-            _isElevated ??= new WindowsPrincipal
-                (WindowsIdentity.GetCurrent()).IsInRole
-                (WindowsBuiltInRole.Administrator);
-
+            _isElevated ??= new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             return _isElevated.Value;
         }
     }
@@ -29,7 +26,7 @@ internal static class AdministratorHelper
         {
             var commandLineArguments = Environment.GetCommandLineArgs();
 #if NET6_0_OR_GREATER
-            var processPath = Environment.ProcessPath ??commandLineArguments[0];
+            var processPath = Environment.ProcessPath ?? commandLineArguments[0];
 #else
             var processPath = commandLineArguments[0];
 #endif
