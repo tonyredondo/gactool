@@ -26,7 +26,6 @@ internal sealed class NativeLibrary
         var errorCode = Marshal.GetLastWin32Error();
         var hr = Marshal.GetHRForLastWin32Error();
         throw new Exception($"Failed to load library (ErrorCode: {errorCode}, HR: {hr})");
-
     }
 
     public static IntPtr GetExport(IntPtr handle, string name)
@@ -40,7 +39,6 @@ internal sealed class NativeLibrary
         var errorCode = Marshal.GetLastWin32Error();
         var hr = Marshal.GetHRForLastWin32Error();
         throw new Exception($"Failed to get the Export (ErrorCode: {errorCode}, HR: {hr})");
-
     }
 
     public static void Free(IntPtr handle)
