@@ -2,8 +2,6 @@
 
 namespace GacTool.Native;
 
-#if NETCOREAPP3_0_OR_GREATER
-
 internal sealed class AssemblyCacheContainer : IDisposable
 {
     private readonly IntPtr _libPointer;
@@ -24,5 +22,3 @@ internal sealed class AssemblyCacheContainer : IDisposable
         }
     }
 }
-
-#endif
