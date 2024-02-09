@@ -2,6 +2,8 @@
 
 namespace GacTool.Native;
 
+// Code based on: https://github.com/dotnet/pinvoke/tree/main/src/Fusion
+
 [ComImport]
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 [Guid("CD193BC0-B4BC-11d2-9833-00C04FC31D2E")]

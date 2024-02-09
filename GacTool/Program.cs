@@ -10,7 +10,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 {
     if (args.Length == 0)
     {
-        Console.WriteLine("Missing command. Options: 'install' or 'uninstall'");
+        Console.WriteLine("Missing command. Options: 'get' or 'install' or 'uninstall'");
         return;
     }
 
@@ -68,11 +68,21 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 
         using var container = NativeMethods.CreateAssemblyCache();
         var hr = container.AssemblyCache.UninstallAssembly(0, assemblyName!, IntPtr.Zero, out var position);
-        if (position == 3 /*IASSEMBLYCACHE_UNINSTALL_DISPOSITION_ALREADY_UNINSTALLED*/)
+
+        switch (position)
         {
-            Console.WriteLine("Assembly '{0}' was already uninstalled from the GAC.", assemblyName);
-            Environment.ExitCode = hr;
-            return;
+            case UninstallDisposition.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_ALREADY_UNINSTALLED:
+                Console.WriteLine($"Assembly '{assemblyName}' was already uninstalled from the GAC.");
+                Environment.ExitCode = hr;
+                return;
+            case UninstallDisposition.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_REFERENCE_NOT_FOUND:
+                Console.WriteLine($"Assembly '{assemblyName}' not found in the GAC.");
+                Environment.ExitCode = hr;
+                return;
+            case UninstallDisposition.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_STILL_IN_USE:
+                Console.WriteLine($"Assembly '{assemblyName}' is still in use.");
+                Environment.ExitCode = hr;
+                return;
         }
         
         if (hr == 0)
@@ -84,6 +94,50 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             Console.WriteLine("Error uninstalling '{0}' from the GAC. HRESULT={1}", assemblyName, hr);
         }
 
+        Environment.ExitCode = hr;
+        return;
+    }
+
+    if (command == "get")
+    {
+        var assemblyName = args[1];
+        if (File.Exists(assemblyName))
+        {
+            try
+            {
+                var asmPath = Path.IsPathRooted(assemblyName)
+                    ? assemblyName
+                    : Path.Combine(Environment.CurrentDirectory, assemblyName);
+                assemblyName = Assembly.LoadFile(asmPath).GetName().Name;
+            }
+            catch
+            {
+                // .
+            }
+        }
+
+        using var container = NativeMethods.CreateAssemblyCache();
+        var asmInfo = new AssemblyInfo();
+        var hr = container.AssemblyCache.QueryAssemblyInfo(QueryAssemblyInfoFlag.QUERYASMINFO_FLAG_GETSIZE, assemblyName!, ref asmInfo);
+        if (hr == 0)
+        {
+            var asmFlags = asmInfo.AssemblyFlags switch
+            {
+                AssemblyInfoFlags.None => "None",
+                AssemblyInfoFlags.ASSEMBLYINFO_FLAG_INSTALLED => "Installed",
+                AssemblyInfoFlags.ASSEMBLYINFO_FLAG_PAYLOADRESIDENT => "Payload resident",
+                _ => string.Empty
+            };
+
+            Console.WriteLine($"Assembly Found!");
+            Console.WriteLine($"  Flag={asmFlags}");
+            Console.WriteLine($"  Path={asmInfo.CurrentAssemblyPath}");
+            Console.WriteLine($"  SizeInKb={asmInfo.AssemblySizeInKb}");
+        }
+        else
+        {
+            Console.WriteLine($"Error getting '{assemblyName}' from the GAC. HRESULT={hr}");
+        }
         Environment.ExitCode = hr;
         return;
     }
