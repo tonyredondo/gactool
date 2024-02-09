@@ -15,7 +15,7 @@ internal sealed class NativeMethods
 
     private delegate int CreateAssemblyCacheDelegate(out IAssemblyCache ppAsmCache, int reserved);
 
-    internal static unsafe AssemblyCacheContainer CreateAssemblyCache()
+    internal static AssemblyCacheContainer CreateAssemblyCache()
     {
         string fusionFullPath;
         using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, Environment.Is64BitProcess ? RegistryView.Registry64 : RegistryView.Registry32).OpenSubKey(NetFrameworkSubKey))
